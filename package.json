@@ -1,0 +1,11 @@
+{
+  "name": "webserver",
+  "version": "0.0.0",
+  "description": "test environment for the website",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodejs server.js"
+  },
+  "author": "Stealth Tigers",
+  "license": "BSD-2-Clause"
+}
