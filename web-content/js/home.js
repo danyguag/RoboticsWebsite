@@ -37,7 +37,7 @@ function homeInit() {
 
                 var titleDiv = document.getElementById(entryDiv.id + "_title");
                 var titleDivSpan = titleDiv.children[0];
-                titleDivSpan.style.fontSize = (window.innerHeight * .05) + "px";
+                titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
                 titleDivSpan.style.height = "auto";
                 var rect = titleDivSpan.getBoundingClientRect();
                 var width = rect.right - rect.left;
@@ -54,18 +54,19 @@ function homeInit() {
                 titleDiv.style.marginLeft = percentageToPX("width", "20%") + "px";
 
                 var leftMargin = styleStringtoInt(titleDivComputedStyle.getPropertyValue("margin-left"), true);
-                
+
                 var textDiv = document.getElementById(entryDiv.id + "_text");
                 var textDivComputedStyle = window.getComputedStyle(textDiv);
-                
+
                 var maxWidth = styleStringtoInt(textDivComputedStyle.getPropertyValue("max-width"), true);
-        
+
+                var titleHeight = window.getComputedStyle(titleDiv).getPropertyValue("height");
                 var leftPadding = percentageToPX("width", "2%");
                 textDiv.style.marginRight = (window.innerWidth - (leftMargin + width + leftPadding + maxWidth)) + "px";
-                textDiv.style.paddingTop = "2vh";
+                textDiv.style.paddingTop = titleHeight;
 
                 var imageHeight =   styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false) + 
-                                    styleStringtoInt(window.getComputedStyle(titleDiv).getPropertyValue("height"), false);
+                                    styleStringtoInt(titleHeight, false);
 
                 textDiv.style.maxHeight = imageHeight + "px";
 
