@@ -1,7 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Code+Pro);
-@import url(https://fonts.googleapis.com/css?family=Raleway);
-@import url(https://fonts.googleapis.com/css?family=Merriweather);
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Oswald);
 
 .no_select {
     -webkit-touch-callout: none;
@@ -21,7 +19,6 @@
 	text-align: center;
 	font-size: 5vh;
 	padding-top: 1%;
-	font-family: Merriweather, serif;
 }
 
 .center {
@@ -46,6 +43,11 @@
     line-height: 50px;
 }
 
+.header_font {
+	font-family: Oswald, sans-serif;
+	font-weight: 600;
+}
+
 .underlined {
 	text-decoration: underline;
 }
@@ -58,7 +60,6 @@
 }
 
 .news_entry_title {
-	font-family: Merriweather, serif;
 	text-align: center;
 	float: left;
 }
@@ -73,7 +74,7 @@
 	height: 100%;
 	max-width: 30%;
 	float: right;
-
+	overflow: hidden;
 }
 
 .news_entry_image {

@@ -352,10 +352,12 @@ var setBodyTextFontSize = function() {
 				if (currentRule.selectorText == ".body_text") {
 					currentRule.style.fontSize = (window.innerHeight * .01656314699826087) + "px";
 				}
+				if (currentRule.selectorText == ".header_style") {
+					currentRule.style.fontSize = (window.innerHeight * 0.0236616385688571) + "px";
+				}
 			}
 		}
 	}
-
 };
 
 window.onresize = function() {
@@ -364,8 +366,6 @@ window.onresize = function() {
 	setupTabs();
 
 	switchTab(getActiveTabElement().attributes[0].nodeValue, true);
-
-	setUpContentWrapper();
 };
 
 $(window).ready(function()

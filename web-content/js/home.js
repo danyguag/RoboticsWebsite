@@ -1,5 +1,44 @@
-function entryNameToEntryNumber(entryName) {
-    return parseInt(entryName.substring("entry".length));
+function getLineHeight(element){
+    var lineHeight = parseInt(window.getComputedStyle(element).getPropertyValue("line-height"), 10);
+    var clone;
+    var singleLineHeight;
+    var doubleLineHeight;
+
+    if (isNaN(lineHeight)) {
+        clone = element.cloneNode();
+        clone.innerHTML = '<br>';
+        element.appendChild(clone);
+        singleLineHeight = clone.offsetHeight;
+        clone.innerHTML = '<br><br>';
+        doubleLineHeight = clone.offsetHeight;
+        element.removeChild(clone);
+        lineHeight = doubleLineHeight - singleLineHeight;
+    }
+
+    return lineHeight;
+ }
+
+var clipText = function(div, text) {
+    var clone = div.cloneNode();
+
+    if (text.length < 200) {
+        console.log("John why did you make this news entry so fucking short");
+        return text;
+    }
+
+    for (let index = 200; index < text.length; ++index) {
+        var shortText = text.substring(0, index + 1);
+        if (shortText[index] == ' ') {
+            shortText[index] = '.';
+            shortText += "..Read More"
+        } else {
+            shortText += "...Read More"
+        }
+
+        clone.innerHTML = shortText;
+        div.appendChild(clone);
+        var y = 0;
+    }
 }
 
 function homeInit() {
@@ -20,6 +59,7 @@ function homeInit() {
             titleDiv.id = "entry" + entryIndex + "_title";
             titleDiv.classList.add("news_entry_title");
             titleDiv.classList.add("no_select");
+            titleDiv.classList.add("header_font");
             var titleDivSpan = document.createElement("span");
             titleDivSpan.innerHTML = title;
             titleDiv.appendChild(titleDivSpan);
@@ -40,7 +80,6 @@ function homeInit() {
                 var titleDivSpan = titleDiv.children[0];
                 titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
                 titleDiv.style.height = ((window.innerHeight * .03) * 1.5) + "px";
-                console.log(this.src + ":" + titleDivSpan.style.height);
                 var titleDivRect = titleDivSpan.getBoundingClientRect();
                 var width = titleDivRect.right - titleDivRect.left;
 
@@ -58,22 +97,25 @@ function homeInit() {
                 var leftMargin = styleStringtoInt(titleDivComputedStyle.getPropertyValue("margin-left"), true);
 
                 var textDiv = document.getElementById(entryDiv.id + "_text");
+                // textDiv.innerHTML = clipText(textDiv, textDiv.innerHTML);
                 var textDivComputedStyle = window.getComputedStyle(textDiv);
 
                 var maxWidth = styleStringtoInt(textDivComputedStyle.getPropertyValue("max-width"), true);
 
                 var titleHeight = window.getComputedStyle(titleDiv).getPropertyValue("height");
-                console.log("computedStyle:" + this.src + ":" + titleHeight);
                 var leftPadding = percentageToPX("width", "2%");
                 textDiv.style.marginRight = (window.innerWidth - (leftMargin + width + leftPadding + maxWidth)) + "px";
                 textDiv.style.top = titleHeight;
+                var lineHeight = getLineHeight(textDiv);
+                console.log("lineHeight: " + lineHeight);
 
-                var imageHeight =   styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false) + 
-                                    styleStringtoInt(titleHeight, false);
+                var imageHeight =   styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false);
 
                 textDiv.style.maxHeight = imageHeight + "px";
 
-                entryDiv.style.height = textDiv.style.maxHeight;
+                imageHeight += styleStringtoInt(titleHeight, false);
+
+                entryDiv.style.height = imageHeight + "px";
             };
             imageDivImg.src = imageSource;
             imageDiv.appendChild(imageDivImg);
