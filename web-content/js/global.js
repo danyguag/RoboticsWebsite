@@ -53,12 +53,15 @@ var changeActiveTabElement = function(newTabName) {
 	// activeTabBlur.style.clip = rect;
 
 	if (newActiveTab.innerText == "HOME") {
-		document.getElementById("home_title").children[0].innerText = "STEALTH TIGER ROBOTICS";
+		document.getElementById("home_title").children[0].innerText = "STEALTH TIGER";
+		document.getElementById("home_title").children[2].innerText = "ROBOTICS";
 		document.getElementById("home_title").style.textAlign = "center";
 		
 	} else {
 		document.getElementById("home_title").children[0].innerText = newActiveTab.innerText;
+		document.getElementById("home_title").children[2].innerText = "";
 		document.getElementById("home_title").style.textAlign = "left";
+		document.getElementById("home_title").style.marginLeft = "5%";
 	}
 };
 

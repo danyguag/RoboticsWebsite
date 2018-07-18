@@ -19,6 +19,7 @@ function homeInit() {
             var titleDiv = document.createElement("div");
             titleDiv.id = "entry" + entryIndex + "_title";
             titleDiv.classList.add("news_entry_title");
+            titleDiv.classList.add("no_select");
             var titleDivSpan = document.createElement("span");
             titleDivSpan.innerHTML = title;
             titleDiv.appendChild(titleDivSpan);
@@ -38,13 +39,14 @@ function homeInit() {
                 var titleDiv = document.getElementById(entryDiv.id + "_title");
                 var titleDivSpan = titleDiv.children[0];
                 titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
-                titleDivSpan.style.height = "auto";
-                var rect = titleDivSpan.getBoundingClientRect();
-                var width = rect.right - rect.left;
+                titleDiv.style.height = ((window.innerHeight * .03) * 1.5) + "px";
+                console.log(this.src + ":" + titleDivSpan.style.height);
+                var titleDivRect = titleDivSpan.getBoundingClientRect();
+                var width = titleDivRect.right - titleDivRect.left;
 
                 if ((width / window.innerWidth) < .214) {
                     width = percentageToPX("width", "20%");
-                } 
+                }
 
                 titleDiv.style.width = width + "px";
                 this.style.width = width + "px";
@@ -61,9 +63,10 @@ function homeInit() {
                 var maxWidth = styleStringtoInt(textDivComputedStyle.getPropertyValue("max-width"), true);
 
                 var titleHeight = window.getComputedStyle(titleDiv).getPropertyValue("height");
+                console.log("computedStyle:" + this.src + ":" + titleHeight);
                 var leftPadding = percentageToPX("width", "2%");
                 textDiv.style.marginRight = (window.innerWidth - (leftMargin + width + leftPadding + maxWidth)) + "px";
-                textDiv.style.paddingTop = titleHeight;
+                textDiv.style.top = titleHeight;
 
                 var imageHeight =   styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false) + 
                                     styleStringtoInt(titleHeight, false);

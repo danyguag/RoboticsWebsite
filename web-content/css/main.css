@@ -57,8 +57,10 @@
 
 /*
 	put more space between each line
+	line-height?
 */
 .news_entry_text {
+	position: relative;
 	width: 100%;
 	height: 100%;
 	max-width: 30%;
