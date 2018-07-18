@@ -1,4 +1,5 @@
 window.callScriptInitCalls = [];
+window.tabsHtml = [];
 
 var getTabElementByName = function(tabName) {
 	var navChildren = document.getElementById("nav").children;
@@ -24,7 +25,7 @@ var getActiveTabElement = function() {
 			return navChild;
 		}
 	}
-}
+};
 
 var changeActiveTabElement = function(newTabName) {
 	const previouslyActiveElement = getActiveTabElement();
@@ -93,14 +94,23 @@ var tabMouseOutEvent = function(event) {
 	hoverTabBlur.style.visibility = "hidden";
 };
 
-var setDocumentTitle = function() {
+var setDocumentTitles = function() {
 	const activeTab = getActiveTabElement();
-	document.title = activeTab.innerText;
+	var uppercaseFirstLetter = activeTab.innerText.charAt(0).toUpperCase();
+	document.title = uppercaseFirstLetter + activeTab.innerText.toLowerCase().substring(1);
+
+	var headerNameSpan = document.getElementById("header_name");
+	if (activeTab.innerHTML == "HOME") {
+		headerNameSpan.innerHTML = "TEAM 3164";
+	} else {
+		headerNameSpan.innerHTML = "STEALTHTIGERS";
+	}
 };
 
 var switchTab = function(tabName, isFirstCall) {
 	changeActiveTabElement(tabName);
-	setDocumentTitle();
+	document.location.hash = tabName.toLowerCase();
+	setDocumentTitles();
 
 	if (isFirstCall) {
 		window.backgroundImageHeight = null;
@@ -112,20 +122,48 @@ var switchTab = function(tabName, isFirstCall) {
 	hoverTabBlur.style.url = "url(" + tabName + ".jpg"
 
 	const contentWrapper = document.getElementById("content_wrapper");
-	var req = new XMLHttpRequest();
-	req.addEventListener("load", function(){
-		contentWrapper.innerHTML = this.responseText;
-		var functionName = tabName + "Init";
-		try {
-			var tabFunction = eval(functionName);
-			tabFunction();
-		} catch(err) {
-			window.callScriptInitCalls.push(tabName);
+
+	var tabsHtml = window.tabsHtml;
+	var set = false;
+
+	for (let index = 0; index < tabsHtml.length; ++index) {
+		const currentTab = tabsHtml[index];
+
+		if (currentTab.name == tabName) {
+			contentWrapper.innerHTML = currentTab.html;
+
+			var functionName = tabName + "Init";
+			try {
+				var tabFunction = eval(functionName);
+				tabFunction();
+			} catch(err) {
+				window.callScriptInitCalls.push(tabName);
+			}
+			set = true;
 		}
-	
-	});
-	req.open("GET", "/" + tabName + ".html");
-	req.send();
+	}
+
+	if (!set) {
+		var req = new XMLHttpRequest();
+		req.addEventListener("load", function(){
+			var newTab = {
+				name: tabName,
+				html: this.responseText
+			};
+			window.tabsHtml.push(newTab);
+			contentWrapper.innerHTML = this.responseText;
+			var functionName = tabName + "Init";
+			try {
+				var tabFunction = eval(functionName);
+				tabFunction();
+			} catch(err) {
+				window.callScriptInitCalls.push(tabName);
+			}
+		
+		});
+		req.open("GET", "/" + tabName + ".html");
+		req.send();
+	}
 
 	var background = document.getElementById("background_image_blur");
 	background.style.backgroundImage = "url(" + tabName + ".jpg";
@@ -134,10 +172,12 @@ var switchTab = function(tabName, isFirstCall) {
 	img.onload = function() {
 		const contentWrapper = document.getElementById("content_wrapper");
 		if (isFirstCall) {
-			window.backgroundImageHeight = img.height + "px";
+			window.backgroundImageHeight = "73%";
 		}
 		background.style.width = "100vw";
 		background.style.height = window.backgroundImageHeight;
+
+		contentWrapper.style.top = percentageToPX("height", window.backgroundImageHeight) + "px";
 	};
 	img.src = tabName + '.jpg';
 };
@@ -162,6 +202,9 @@ var getTabNameFromSrc = function(src) {
 }
 
 var setupTabs = function() {
+	var homeTitle = document.getElementById("home_title");
+	homeTitle.style.fontSize = percentageToPX("height", "7.5%") + "px";
+
 	var navChildren = document.getElementById("nav").children;
 
 	for (let liIndex = 0; liIndex < navChildren.length; ++liIndex) {
@@ -217,15 +260,6 @@ var setupTabs = function() {
 			}
 		}
 	} 
-};
-
-var setUpContentWrapper = function() {
-	var img = new Image();
-	img.onload = function() {
-		const contentWrapper = document.getElementById("content_wrapper");
-		contentWrapper.style.top = img.height + "px";
-	};
-	img.src = 'home.jpg';
 };
 
 var endsWith = function(src, end) {
@@ -303,11 +337,42 @@ var retrieveAndParseData = function(fileName, callback) {
 	req.send();
 };
 
+var setBodyTextFontSize = function() {
+	const styleSheets = document.styleSheets;
+
+	for (let styleSheetIndex = 0; styleSheetIndex < styleSheets.length; ++styleSheetIndex) {
+		const currentStyleSheet = styleSheets[styleSheetIndex];
+
+		if (endsWith(currentStyleSheet.href, "main.css")) {
+			const rules = currentStyleSheet.rules;
+
+			for (let ruleIndex = 0; ruleIndex < rules.length; ++ruleIndex) {
+				const currentRule = rules[ruleIndex];
+
+				if (currentRule.selectorText == ".body_text") {
+					currentRule.style.fontSize = (window.innerHeight * .01656314699826087) + "px";
+				}
+			}
+		}
+	}
+
+};
+
+window.onresize = function() {
+	setBodyTextFontSize();
+
+	setupTabs();
+
+	switchTab(getActiveTabElement().attributes[0].nodeValue, true);
+
+	setUpContentWrapper();
+};
+
 $(window).ready(function()
 {
+	setBodyTextFontSize();
+
 	setupTabs();
 
 	switchTab("home", true);
-
-	setUpContentWrapper();
 });

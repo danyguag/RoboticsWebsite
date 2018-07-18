@@ -24,6 +24,10 @@
 	font-family: Merriweather, serif;
 }
 
+.center {
+	text-align: center;
+}
+
 .text_outline {
 	text-shadow:
 	-1px -1px 0 #000,
@@ -42,6 +46,10 @@
     line-height: 50px;
 }
 
+.underlined {
+	text-decoration: underline;
+}
+
 .links {
     background-color: transparent;
     float: right; 
@@ -55,17 +63,17 @@
 	float: left;
 }
 
-/*
-	put more space between each line
-	line-height?
-*/
+.body_text {
+	font-family: "Century Gothic", sans-serif;
+}
+
 .news_entry_text {
 	position: relative;
 	width: 100%;
 	height: 100%;
 	max-width: 30%;
 	float: right;
-	font-family: Montserrat, sans-serif;
+
 }
 
 .news_entry_image {
@@ -81,14 +89,7 @@
 #home_title {
 	color: rgb(255,255,255);
 	font-weight: 900;
-	font-size: 70px;
 	margin-top: 8%;
-
-	text-shadow:
-		-1px -1px 0 #000,
-		1px -1px 0 #000,
-		-1px 1px 0 #000,
-		1px 1px 0 #000;
 }
 
 #background_image_blur {
