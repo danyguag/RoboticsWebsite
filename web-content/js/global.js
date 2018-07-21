@@ -80,11 +80,14 @@ var tabMouseOverEvent = function(event) {
 	const hoverTabBlur = document.getElementById("hover_tab_blur");
 	hoverTabBlur.style.visibility = "visible";
 	hoverTabBlur.style.top = rect.top + "px";
+	hoverTabBlur.style.right = rect.right + "px";
 	hoverTabBlur.style.bottom = rect.bottom + "px";
 	hoverTabBlur.style.left = rect.left + "px";
-	hoverTabBlur.style.right = rect.right + "px";
 	hoverTabBlur.style.width = rect.width + "px";
 	hoverTabBlur.style.height = rect.height + "px";
+
+	// hoverTabBlur.style.clip = "rect(" + hoverTabBlur.style.top + "," + hoverTabBlur.style.right + "," + hoverTabBlur.style.bottom + "," + hoverTabBlur.style.left + ")";
+
 };
 
 var tabMouseOutEvent = function(event) {
@@ -167,6 +170,12 @@ var switchTab = function(tabName, isFirstCall) {
 
 	var background = document.getElementById("background_image_blur");
 	background.style.backgroundImage = "url(" + tabName + ".jpg";
+
+	var acbackground = document.getElementById("active_tab_blur");
+	acbackground.style.backgroundImage = "url(" + tabName + ".jpg";
+
+	var htbackground = document.getElementById("hover_tab_blur");
+	htbackground.style.backgroundImage = "url(" + tabName + ".jpg";
 
 	var img = new Image();
 	img.onload = function() {
@@ -274,6 +283,16 @@ var endsWith = function(src, end) {
 	return true;
 };
 
+var startsWith = function(src, start) {
+	for (let index = 0; index < start.length; ++index) {
+		if (src[index] != start[index]) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
 var styleStringtoInt = function(styleString, width) {
 	if (endsWith(styleString, "px")) {
 		return parseInt(styleString.substring(0, styleString.length - 2));
@@ -358,6 +377,48 @@ var setBodyTextFontSize = function() {
 			}
 		}
 	}
+};
+
+var setUpArticlePage = function(articleID, title, imageSrc, text) {
+	var titleDiv = document.createElement("div");
+	titleDiv.id = articleID + "_title";
+	titleDiv.classList.add("center_title_text");
+	titleDiv.classList.add("no_select");
+	titleDiv.classList.add("header_font");
+	var titleDivSpan = document.createElement("span");
+	titleDivSpan.innerHTML = title;
+	titleDiv.appendChild(titleDivSpan);
+
+	var imageDiv = document.createElement("div");
+	imageDiv.id = articleID + "_image";
+	imageDiv.style.textAlign = "center";
+	var imageDivImg = document.createElement("img");
+	imageDivImg.onload = function() {
+		var imageWidth = percentageToPX("width", "40%");
+		imageDivImg.style.width = imageWidth + "px";
+		imageDivImg.style.height = "auto";
+	};
+	imageDivImg.src = imageSrc;
+	imageDiv.appendChild(imageDivImg);
+	
+	var textDiv = document.createElement("div");
+	textDiv.id = articleID + "_text";
+	textDiv.classList.add("body_text");
+	textDiv.classList.add("center");
+	textDiv.style.marginLeft = "30%";
+	textDiv.style.maxWidth = "40%";
+	textDiv.style.width = "100%";
+	textDiv.innerHTML = text;
+
+	var mainContainer = document.createElement("div");
+	mainContainer.id = articleID;
+	mainContainer.appendChild(titleDiv);
+	mainContainer.appendChild(imageDiv);
+	mainContainer.appendChild(textDiv);
+
+	var contentWrapper = document.getElementById("content_wrapper");
+	contentWrapper.innerHTML = "";
+	contentWrapper.appendChild(mainContainer);
 };
 
 window.onresize = function() {

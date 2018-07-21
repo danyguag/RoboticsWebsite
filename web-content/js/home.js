@@ -18,6 +18,8 @@ function getLineHeight(element){
     return lineHeight;
  }
 
+ //So get the height of the text and then divide that to get the amount of lines
+ //And then remove the text and add ...Read More and put that text
 var clipText = function(div, text) {
     var clone = div.cloneNode();
 
@@ -30,14 +32,16 @@ var clipText = function(div, text) {
         var shortText = text.substring(0, index + 1);
         if (shortText[index] == ' ') {
             shortText[index] = '.';
-            shortText += "..Read More"
+            shortText += "..Read More";
         } else {
-            shortText += "...Read More"
+            shortText += "...Read More";
         }
 
         clone.innerHTML = shortText;
         div.appendChild(clone);
-        var y = 0;
+        div.removeChild(clone);
+        // console.log("div.width: " + window.getComputedStyle(div).getPropertyValue("width"));
+        // console.log("clone.width: " + window.getComputedStyle(div).getPropertyValue("width"));
     }
 }
 
@@ -62,11 +66,36 @@ function homeInit() {
             titleDiv.classList.add("header_font");
             var titleDivSpan = document.createElement("span");
             titleDivSpan.innerHTML = title;
+            
+            titleDivSpan.onmouseover = function(event) {
+                var element = event.path[0];
+
+                element.style.color = "grey";
+            };
+            titleDivSpan.onmouseleave = function(event) {
+                var element = event.path[0];
+
+                element.style.color = "black";
+            };
+            titleDivSpan.onmousedown = function(event) {
+                //Since this is the span inside of the titleDiv you
+                // have you go back two parent elements to get to the entry div
+                var entryDiv = event.path[0].parentElement.parentElement;
+
+                var title = entryDiv.children[0].innerText;
+                var text = entryDiv.children[1].innerText;
+                var imageSrc = entryDiv.children[2].children[0].src;
+
+                setUpArticlePage(entryDiv.id, title, imageSrc, text);
+
+            };
+
             titleDiv.appendChild(titleDivSpan);
 
             var textDiv = document.createElement("div");
             textDiv.id = "entry" + entryIndex + "_text";
             textDiv.classList.add("news_entry_text");
+            textDiv.classList.add("body_text");
             textDiv.innerHTML = text;
 
             var imageDiv = document.createElement("div");
@@ -97,7 +126,7 @@ function homeInit() {
                 var leftMargin = styleStringtoInt(titleDivComputedStyle.getPropertyValue("margin-left"), true);
 
                 var textDiv = document.getElementById(entryDiv.id + "_text");
-                // textDiv.innerHTML = clipText(textDiv, textDiv.innerHTML);
+                
                 var textDivComputedStyle = window.getComputedStyle(textDiv);
 
                 var maxWidth = styleStringtoInt(textDivComputedStyle.getPropertyValue("max-width"), true);
@@ -107,9 +136,12 @@ function homeInit() {
                 textDiv.style.marginRight = (window.innerWidth - (leftMargin + width + leftPadding + maxWidth)) + "px";
                 textDiv.style.top = titleHeight;
                 var lineHeight = getLineHeight(textDiv);
-                console.log("lineHeight: " + lineHeight);
 
                 var imageHeight =   styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false);
+
+                var lines = Math.floor(imageHeight / lineHeight);
+                console.log("lines: " + lines);
+                textDiv.style.height = lines* lineHeight + "px";
 
                 textDiv.style.maxHeight = imageHeight + "px";
 
