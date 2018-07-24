@@ -51,7 +51,6 @@ var changeActiveTabElement = function(newTabName) {
 	activeTabBlur.style.right = rect.right + "px";
 	activeTabBlur.style.width = rect.width + "px";
 	activeTabBlur.style.height = rect.height + "px";
-	// activeTabBlur.style.clip = rect;
 
 	if (newActiveTab.innerText == "HOME") {
 		document.getElementById("home_title").children[0].innerText = "STEALTH TIGER";
@@ -103,7 +102,8 @@ var setDocumentTitles = function() {
 	document.title = uppercaseFirstLetter + activeTab.innerText.toLowerCase().substring(1);
 
 	var headerNameSpan = document.getElementById("header_name");
-	if (activeTab.innerHTML == "HOME") {
+	console.log(activeTab.innerHTML);
+	if (activeTab.children[0].innerHTML == "HOME") {
 		headerNameSpan.innerHTML = "TEAM 3164";
 	} else {
 		headerNameSpan.innerHTML = "STEALTHTIGERS";
@@ -214,10 +214,22 @@ var setupTabs = function() {
 	var homeTitle = document.getElementById("home_title");
 	homeTitle.style.fontSize = percentageToPX("height", "7.5%") + "px";
 
-	var navChildren = document.getElementById("nav").children;
+	var nav = document.getElementById("nav");
+	var navChildren = nav.children;
+
+	var navWidth = 0;
+	nav.style.width = percentageToPX("width", "50%") + "px";
+
+	var minMargin = window.innerWidth * 0.022265625;
 
 	for (let liIndex = 0; liIndex < navChildren.length; ++liIndex) {
 		const navChild = navChildren[liIndex];
+		const navChildSpan = navChild.children[0];
+		
+		navChild.style.width = (percentageToPX("width", "50%") / navChildren.length) + "px";
+		navChild.style.width = (navChildSpan.offsetWidth + minMargin) + "px";
+		console.log(navChild.localName + ":" + navChild.style.width);
+		navWidth += navChild.scrollWidth;
 
 		navChild.onmouseover = tabMouseOverEvent;
 		navChild.onmouseout = tabMouseOutEvent;
@@ -243,6 +255,8 @@ var setupTabs = function() {
 
     	document.head.appendChild(script);
 	}
+
+	nav.style.width = navWidth + "px";
 
 	var wrapperChildren = document.getElementById("wrapper").children;
 
@@ -378,6 +392,99 @@ var setBodyTextFontSize = function() {
 		}
 	}
 };
+
+var setUpDevelopmentOutreach =  function(data) {
+	var entryIndex = 0;
+
+	for (let dataIndex = 0; dataIndex < data.length; dataIndex += 3) {
+		var title = data[dataIndex];
+		var text = data[dataIndex + 1];
+		var imageSource = data[dataIndex + 2];
+
+		var entryDiv = document.createElement("div");
+		entryDiv.id = "entry" + entryIndex;
+		entryDiv.style.width = "100%";
+		entryDiv.style.marginTop = "2%";
+
+		var titleDiv = document.createElement("div");
+		titleDiv.id = "entry" + entryIndex + "_title";
+		titleDiv.classList.add("news_entry_title");
+		titleDiv.classList.add("no_select");
+		titleDiv.style.verticalAlign = "middle";
+		titleDiv.style.position = "relative";
+		titleDiv.classList.add("header_font");
+		var titleDivSpan = document.createElement("span");
+		titleDivSpan.innerHTML = title;
+		
+		titleDivSpan.onmouseover = function(event) {
+			var element = event.path[0];
+
+			element.style.color = "grey";
+		};
+		titleDivSpan.onmouseleave = function(event) {
+			var element = event.path[0];
+
+			element.style.color = "black";
+		};		
+		titleDiv.appendChild(titleDivSpan);
+
+		titleDivSpan.onmousedown = function(event) {
+			//Since this is the span inside of the titleDiv you
+			// have you go back two parent elements to get to the entry div
+			var entryDiv = event.path[0].parentElement.parentElement;
+
+			var title = entryDiv.children[1].innerText;
+			var text = entryDiv.children[2].innerHTML;
+			console.log(text);
+			var imageSrc = entryDiv.children[0].children[0].src;
+
+			setUpArticlePage(entryDiv.id, title, imageSrc, text);
+		};
+
+		var textDiv = document.createElement("div");
+		textDiv.id = "entry" + entryIndex + "_text";
+		textDiv.classList.add("news_entry_text");
+		textDiv.classList.add("body_text");
+		textDiv.innerHTML = text;
+		textDiv.style.visibility = "hidden";
+
+		var imageDiv = document.createElement("div");
+		imageDiv.id = "entry" + entryIndex + "_image";
+		imageDiv.classList.add("news_entry_image");
+		var imageDivImg = document.createElement("img");
+		imageDivImg.onload = function() {
+			var imageDiv = this.parentElement;
+			imageDiv.style.width = "20%";
+			this.style.width = "100%";
+			this.style.height = "auto";
+
+			var imageHeight = styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false);
+			imageDiv.parentElement.style.height = imageHeight + "px";
+
+			var titleDiv = document.getElementById(entryDiv.id + "_title");
+			var titleDivSpan = titleDiv.children[0];
+			titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
+			titleDiv.style.height = ((window.innerHeight * .03) * 1.5) + "px";
+			var titleDivRect = titleDivSpan.getBoundingClientRect();
+			
+			titleDiv.style.top = ((this.height / 2) - titleDivRect.height) + "px";
+
+			console.log("wtf" + titleDiv.style.top);
+		};
+		imageDivImg.src = imageSource;
+		imageDiv.appendChild(imageDivImg);
+
+		entryDiv.appendChild(imageDiv);
+		entryDiv.appendChild(titleDiv);
+		entryDiv.appendChild(textDiv);
+
+		var contentWrapper = document.getElementById("content_wrapper");
+		contentWrapper.appendChild(entryDiv);
+		contentWrapper.appendChild(document.createElement("br"));
+
+		++entryIndex;
+	}
+}
 
 var setUpArticlePage = function(articleID, title, imageSrc, text) {
 	var titleDiv = document.createElement("div");

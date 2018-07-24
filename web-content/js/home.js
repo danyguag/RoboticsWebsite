@@ -24,7 +24,7 @@ var clipText = function(div, text) {
     var clone = div.cloneNode();
 
     if (text.length < 200) {
-        console.log("John why did you make this news entry so fucking short");
+        console.log("John why did you make this news entry so short");
         return text;
     }
 
