@@ -393,6 +393,10 @@ var setBodyTextFontSize = function() {
 	}
 };
 
+var getEntryNumer = function(entryID) {
+	return parseInt(entryID.substring("entry".length));
+}
+
 var setUpDevelopmentOutreach =  function(data) {
 	var entryIndex = 0;
 
@@ -403,19 +407,19 @@ var setUpDevelopmentOutreach =  function(data) {
 
 		var entryDiv = document.createElement("div");
 		entryDiv.id = "entry" + entryIndex;
-		entryDiv.style.width = "100%";
+		entryDiv.style.width = "20%";
 		entryDiv.style.marginTop = "2%";
+		entryDiv.style.display = "inline-block";
+		entryDiv.style.float = "left";
 
 		var titleDiv = document.createElement("div");
 		titleDiv.id = "entry" + entryIndex + "_title";
 		titleDiv.classList.add("news_entry_title");
 		titleDiv.classList.add("no_select");
-		titleDiv.style.verticalAlign = "middle";
-		titleDiv.style.position = "relative";
 		titleDiv.classList.add("header_font");
 		var titleDivSpan = document.createElement("span");
 		titleDivSpan.innerHTML = title;
-		
+
 		titleDivSpan.onmouseover = function(event) {
 			var element = event.path[0];
 
@@ -435,7 +439,6 @@ var setUpDevelopmentOutreach =  function(data) {
 
 			var title = entryDiv.children[1].innerText;
 			var text = entryDiv.children[2].innerHTML;
-			console.log(text);
 			var imageSrc = entryDiv.children[0].children[0].src;
 
 			setUpArticlePage(entryDiv.id, title, imageSrc, text);
@@ -446,30 +449,43 @@ var setUpDevelopmentOutreach =  function(data) {
 		textDiv.classList.add("news_entry_text");
 		textDiv.classList.add("body_text");
 		textDiv.innerHTML = text;
-		textDiv.style.visibility = "hidden";
+		textDiv.style.overflow = "hidden";
+		textDiv.style.width = 0;
+		textDiv.style.height = 0;
 
 		var imageDiv = document.createElement("div");
 		imageDiv.id = "entry" + entryIndex + "_image";
-		imageDiv.classList.add("news_entry_image");
 		var imageDivImg = document.createElement("img");
 		imageDivImg.onload = function() {
 			var imageDiv = this.parentElement;
-			imageDiv.style.width = "20%";
+			var entryDiv = imageDiv.parentElement;
+			imageDiv.style.width = "100%";
 			this.style.width = "100%";
 			this.style.height = "auto";
 
-			var imageHeight = styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false);
+			var entryIndex = getEntryNumer(entryDiv.id) + 1;
+			var remainder = entryIndex % 3;
+
+			if (remainder == 1) {
+
+			} else if (remainder == 0) {
+				var contentWrapper = document.getElementById("content_wrapper");
+				contentWrapper.appendChild(document.createElement("br"));
+			}
+
+			var thisImageComputedStype = window.getComputedStyle(this);
+			var imageHeight = styleStringtoInt(thisImageComputedStype.getPropertyValue("height"), false);
+			var imageWidth = styleStringtoInt(thisImageComputedStype.getPropertyValue("width"));
 			imageDiv.parentElement.style.height = imageHeight + "px";
 
-			var titleDiv = document.getElementById(entryDiv.id + "_title");
-			var titleDivSpan = titleDiv.children[0];
+			const titleDiv = document.getElementById(entryDiv.id + "_title");
+			const titleDivSpan = titleDiv.children[0];
 			titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
 			titleDiv.style.height = ((window.innerHeight * .03) * 1.5) + "px";
 			var titleDivRect = titleDivSpan.getBoundingClientRect();
-			
-			titleDiv.style.top = ((this.height / 2) - titleDivRect.height) + "px";
-
-			console.log("wtf" + titleDiv.style.top);
+	
+			titleDiv.style.width = imageWidth + "px";
+			console.log(entryDiv.id + ":titleDiv.style.top:" + titleDiv.getBoundingClientRect().top);
 		};
 		imageDivImg.src = imageSource;
 		imageDiv.appendChild(imageDivImg);

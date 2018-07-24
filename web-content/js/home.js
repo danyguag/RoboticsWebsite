@@ -18,33 +18,6 @@ function getLineHeight(element){
     return lineHeight;
  }
 
- //So get the height of the text and then divide that to get the amount of lines
- //And then remove the text and add ...Read More and put that text
-var clipText = function(div, text) {
-    var clone = div.cloneNode();
-
-    if (text.length < 200) {
-        console.log("John why did you make this news entry so short");
-        return text;
-    }
-
-    for (let index = 200; index < text.length; ++index) {
-        var shortText = text.substring(0, index + 1);
-        if (shortText[index] == ' ') {
-            shortText[index] = '.';
-            shortText += "..Read More";
-        } else {
-            shortText += "...Read More";
-        }
-
-        clone.innerHTML = shortText;
-        div.appendChild(clone);
-        div.removeChild(clone);
-        // console.log("div.width: " + window.getComputedStyle(div).getPropertyValue("width"));
-        // console.log("clone.width: " + window.getComputedStyle(div).getPropertyValue("width"));
-    }
-}
-
 function homeInit() {
     retrieveAndParseData("news_entries", function(dataArray) {
         var newsElement = document.getElementById("news");
