@@ -1,6 +1,14 @@
 window.callScriptInitCalls = [];
 window.tabsHtml = [];
 
+Element.prototype.appendBefore = function (element) {
+	element.parentNode.insertBefore(this, element);
+},false;
+
+Element.prototype.appendAfter = function (element) {
+	element.parentNode.insertBefore(this, element.nextSibling);
+},false;
+
 var getTabElementByName = function(tabName) {
 	var navChildren = document.getElementById("nav").children;
 
@@ -102,7 +110,6 @@ var setDocumentTitles = function() {
 	document.title = uppercaseFirstLetter + activeTab.innerText.toLowerCase().substring(1);
 
 	var headerNameSpan = document.getElementById("header_name");
-	console.log(activeTab.innerHTML);
 	if (activeTab.children[0].innerHTML == "HOME") {
 		headerNameSpan.innerHTML = "TEAM 3164";
 	} else {
@@ -219,7 +226,6 @@ var setupTabs = function() {
 
 	var navWidth = 0;
 	nav.style.width = percentageToPX("width", "50%") + "px";
-
 	var minMargin = window.innerWidth * 0.022265625;
 
 	for (let liIndex = 0; liIndex < navChildren.length; ++liIndex) {
@@ -228,8 +234,7 @@ var setupTabs = function() {
 		
 		navChild.style.width = (percentageToPX("width", "50%") / navChildren.length) + "px";
 		navChild.style.width = (navChildSpan.offsetWidth + minMargin) + "px";
-		console.log(navChild.localName + ":" + navChild.style.width);
-		navWidth += navChild.scrollWidth;
+		navWidth += (navChildSpan.offsetWidth + minMargin);
 
 		navChild.onmouseover = tabMouseOverEvent;
 		navChild.onmouseout = tabMouseOutEvent;
@@ -256,7 +261,7 @@ var setupTabs = function() {
     	document.head.appendChild(script);
 	}
 
-	nav.style.width = navWidth + "px";
+	nav.style.width = (navWidth + percentageToPX("width", "2%")) + "px";
 
 	var wrapperChildren = document.getElementById("wrapper").children;
 
@@ -400,6 +405,9 @@ var getEntryNumer = function(entryID) {
 var setUpDevelopmentOutreach =  function(data) {
 	var entryIndex = 0;
 
+	var rowImageWidth = 0;
+	var rowImageHeight = 0;
+
 	for (let dataIndex = 0; dataIndex < data.length; dataIndex += 3) {
 		var title = data[dataIndex];
 		var text = data[dataIndex + 1];
@@ -456,6 +464,7 @@ var setUpDevelopmentOutreach =  function(data) {
 		var imageDiv = document.createElement("div");
 		imageDiv.id = "entry" + entryIndex + "_image";
 		var imageDivImg = document.createElement("img");
+
 		imageDivImg.onload = function() {
 			var imageDiv = this.parentElement;
 			var entryDiv = imageDiv.parentElement;
@@ -463,29 +472,37 @@ var setUpDevelopmentOutreach =  function(data) {
 			this.style.width = "100%";
 			this.style.height = "auto";
 
-			var entryIndex = getEntryNumer(entryDiv.id) + 1;
-			var remainder = entryIndex % 3;
-
-			if (remainder == 1) {
-
-			} else if (remainder == 0) {
-				var contentWrapper = document.getElementById("content_wrapper");
-				contentWrapper.appendChild(document.createElement("br"));
-			}
-
 			var thisImageComputedStype = window.getComputedStyle(this);
 			var imageHeight = styleStringtoInt(thisImageComputedStype.getPropertyValue("height"), false);
 			var imageWidth = styleStringtoInt(thisImageComputedStype.getPropertyValue("width"));
-			imageDiv.parentElement.style.height = imageHeight + "px";
-
 			const titleDiv = document.getElementById(entryDiv.id + "_title");
 			const titleDivSpan = titleDiv.children[0];
+
+			var entryIndex = getEntryNumer(entryDiv.id) + 1;
+			var remainder = entryIndex % 3;
+
+			entryDiv.style.marginRight = "2%";
+
+			if (remainder == 1) {
+				entryDiv.style.marginLeft = "17%";
+				
+				rowImageWidth = imageWidth;
+				rowImageHeight = imageHeight;
+			} else {
+				imageWidth = rowImageWidth;
+				imageHeight = rowImageHeight;
+				this.style.width = imageWidth + "px";
+				this.style.height = imageHeight + "px";
+				console.log("This is a test to see when this happens(width: " + rowImageWidth + ", height: " + rowImageHeight + ")");
+				if (remainder == 0) {
+					document.createElement("br").appendAfter(entryDiv);
+				}
+			}
+
+			imageDiv.parentElement.style.height = imageHeight + "px";
 			titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
 			titleDiv.style.height = ((window.innerHeight * .03) * 1.5) + "px";
-			var titleDivRect = titleDivSpan.getBoundingClientRect();
-	
 			titleDiv.style.width = imageWidth + "px";
-			console.log(entryDiv.id + ":titleDiv.style.top:" + titleDiv.getBoundingClientRect().top);
 		};
 		imageDivImg.src = imageSource;
 		imageDiv.appendChild(imageDivImg);
@@ -496,7 +513,6 @@ var setUpDevelopmentOutreach =  function(data) {
 
 		var contentWrapper = document.getElementById("content_wrapper");
 		contentWrapper.appendChild(entryDiv);
-		contentWrapper.appendChild(document.createElement("br"));
 
 		++entryIndex;
 	}

@@ -113,7 +113,6 @@ function homeInit() {
                 var imageHeight =   styleStringtoInt(window.getComputedStyle(this).getPropertyValue("height"), false);
 
                 var lines = Math.floor(imageHeight / lineHeight);
-                console.log("lines: " + lines);
                 textDiv.style.height = lines* lineHeight + "px";
 
                 textDiv.style.maxHeight = imageHeight + "px";
