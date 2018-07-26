@@ -264,9 +264,7 @@ var setupTabs = function() {
 	nav.style.width = (navWidth + percentageToPX("width", "2%")) + "px";
 
 	var wrapperChildren = document.getElementById("wrapper").children;
-
 	var header = document.getElementById("header").children[0];
-
 	var hrTop = window.getComputedStyle(header).getPropertyValue("height");
 
 	if (hrTop == "0px") {
@@ -407,6 +405,7 @@ var setUpDevelopmentOutreach =  function(data) {
 
 	var rowImageWidth = 0;
 	var rowImageHeight = 0;
+	var rowDivTop = 0;
 
 	for (let dataIndex = 0; dataIndex < data.length; dataIndex += 3) {
 		var title = data[dataIndex];
@@ -416,30 +415,31 @@ var setUpDevelopmentOutreach =  function(data) {
 		var entryDiv = document.createElement("div");
 		entryDiv.id = "entry" + entryIndex;
 		entryDiv.style.width = "20%";
-		entryDiv.style.marginTop = "2%";
+		
+		if (entryIndex < 3) {
+			entryDiv.style.marginTop = "2%";
+		} else {
+			entryDiv.style.marginTop = "1%";
+		}
+
 		entryDiv.style.display = "inline-block";
 		entryDiv.style.float = "left";
 
 		var titleDiv = document.createElement("div");
+		var titleDivSpan = document.createElement("span");
+
 		titleDiv.id = "entry" + entryIndex + "_title";
 		titleDiv.classList.add("news_entry_title");
 		titleDiv.classList.add("no_select");
 		titleDiv.classList.add("header_font");
-		var titleDivSpan = document.createElement("span");
+		
 		titleDivSpan.innerHTML = title;
-
 		titleDivSpan.onmouseover = function(event) {
-			var element = event.path[0];
-
-			element.style.color = "grey";
+			event.path[0].style.color = "grey";
 		};
 		titleDivSpan.onmouseleave = function(event) {
-			var element = event.path[0];
-
-			element.style.color = "black";
+			event.path[0].style.color = "black";
 		};		
-		titleDiv.appendChild(titleDivSpan);
-
 		titleDivSpan.onmousedown = function(event) {
 			//Since this is the span inside of the titleDiv you
 			// have you go back two parent elements to get to the entry div
@@ -451,6 +451,7 @@ var setUpDevelopmentOutreach =  function(data) {
 
 			setUpArticlePage(entryDiv.id, title, imageSrc, text);
 		};
+		titleDiv.appendChild(titleDivSpan);
 
 		var textDiv = document.createElement("div");
 		textDiv.id = "entry" + entryIndex + "_text";
@@ -493,16 +494,21 @@ var setUpDevelopmentOutreach =  function(data) {
 				imageHeight = rowImageHeight;
 				this.style.width = imageWidth + "px";
 				this.style.height = imageHeight + "px";
+				// this.style.top = rowDivTop + "px";
+				
 				console.log("This is a test to see when this happens(width: " + rowImageWidth + ", height: " + rowImageHeight + ")");
 				if (remainder == 0) {
 					document.createElement("br").appendAfter(entryDiv);
+					rowDivTop += rowImageHeight;
 				}
 			}
 
 			imageDiv.parentElement.style.height = imageHeight + "px";
 			titleDivSpan.style.fontSize = (window.innerHeight * .03) + "px";
-			titleDiv.style.height = ((window.innerHeight * .03) * 1.5) + "px";
+			var titleDivHeight = ((window.innerHeight * .03) * 1.5);
+			titleDiv.style.height = titleDivHeight + "px";
 			titleDiv.style.width = imageWidth + "px";
+			entryDiv.style.height = (titleDivHeight + imageHeight) + "px";
 		};
 		imageDivImg.src = imageSource;
 		imageDiv.appendChild(imageDivImg);
@@ -513,6 +519,11 @@ var setUpDevelopmentOutreach =  function(data) {
 
 		var contentWrapper = document.getElementById("content_wrapper");
 		contentWrapper.appendChild(entryDiv);
+
+		if ((entryIndex % 3) == 0 &&
+			(entryIndex > 0)) {
+			contentWrapper.appendChild(document.createElement("br"));
+		}
 
 		++entryIndex;
 	}
