@@ -358,6 +358,9 @@ var retrieveAndParseData = function(fileName, callback) {
 				var nextAddition = data.substring(startIndex, dataIndex);
 				dataArray.push(nextAddition);
 				startIndex = dataIndex = dataIndex + 5;
+				if (data[startIndex] == '\n') {
+					++startIndex;
+				}
 			} else {
 				dataIndex += 1;
 			}
@@ -558,7 +561,8 @@ var setUpArticlePage = function(articleID, title, imageSrc, text) {
 	textDiv.style.marginLeft = "30%";
 	textDiv.style.maxWidth = "40%";
 	textDiv.style.width = "100%";
-	textDiv.innerHTML = text;
+	var realText = text + "<br><br><br>";
+	textDiv.innerHTML = realText;
 
 	var mainContainer = document.createElement("div");
 	mainContainer.id = articleID;

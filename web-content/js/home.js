@@ -56,7 +56,7 @@ function homeInit() {
                 var entryDiv = event.path[0].parentElement.parentElement;
 
                 var title = entryDiv.children[0].innerText;
-                var text = entryDiv.children[1].innerText;
+                var text = entryDiv.children[1].innerHTML;
                 var imageSrc = entryDiv.children[2].children[0].src;
 
                 setUpArticlePage(entryDiv.id, title, imageSrc, text);
