@@ -403,7 +403,7 @@ var getEntryNumer = function(entryID) {
 	return parseInt(entryID.substring("entry".length));
 }
 
-var setUpDevelopmentOutreach =  function(data) {
+var setUpProjects =  function(data) {
 	var entryIndex = 0;
 
 	var rowImageWidth = 0;
@@ -497,9 +497,7 @@ var setUpDevelopmentOutreach =  function(data) {
 				imageHeight = rowImageHeight;
 				this.style.width = imageWidth + "px";
 				this.style.height = imageHeight + "px";
-				// this.style.top = rowDivTop + "px";
 				
-				console.log("This is a test to see when this happens(width: " + rowImageWidth + ", height: " + rowImageHeight + ")");
 				if (remainder == 0) {
 					document.createElement("br").appendAfter(entryDiv);
 					rowDivTop += rowImageHeight;

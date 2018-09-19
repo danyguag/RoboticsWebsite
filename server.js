@@ -86,7 +86,6 @@ var endsWith = function(src, end) {
 };
 
 http.createServer(function (req, res) {
-	console.log("req.url: " + req.url);
 	try {
 		if (endsWith(req.url, ".html")) {
 			sendHtmlFile(res, req.url);

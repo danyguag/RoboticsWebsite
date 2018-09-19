@@ -1,0 +1,18 @@
+- Rename Development to Projects DONE
+- Remove the Outreach Tab DONE
+
+- Add all of the projects into the page
+    - T-Shirt Cannon
+    - Go Baby Go
+    - Frc 2018 Season
+- Maybe make it so that the team projects and outreach 
+  are split into two sections
+- About page
+    - First Section - Team
+        - Team Picture
+        - Team Description
+    - Second Section - Members
+        - Picture of every team member with short bio
+- Sponsorship Tab
+    - Add Section for each tier on the sponsorship sheet
+    - Add form at the bottom of the page that you can donate to
