@@ -388,7 +388,7 @@ var setBodyTextFontSize = function() {
 			for (let ruleIndex = 0; ruleIndex < rules.length; ++ruleIndex) {
 				const currentRule = rules[ruleIndex];
 
-				if (currentRule.selectorText == ".body_text") {
+				if (currentRule.selectorText == ".body_text_font") {
 					currentRule.style.fontSize = (window.innerHeight * .01656314699826087) + "px";
 				}
 				if (currentRule.selectorText == ".header_style") {
@@ -460,6 +460,7 @@ var setUpProjects =  function(data) {
 		textDiv.id = "entry" + entryIndex + "_text";
 		textDiv.classList.add("news_entry_text");
 		textDiv.classList.add("body_text");
+		textDiv.classList.add("body_text_font");
 		textDiv.innerHTML = text;
 		textDiv.style.overflow = "hidden";
 		textDiv.style.width = 0;
@@ -555,6 +556,7 @@ var setUpArticlePage = function(articleID, title, imageSrc, text) {
 	var textDiv = document.createElement("div");
 	textDiv.id = articleID + "_text";
 	textDiv.classList.add("body_text");
+	textDiv.classList.add("body_text_font");
 	textDiv.classList.add("center");
 	textDiv.style.marginLeft = "30%";
 	textDiv.style.maxWidth = "40%";

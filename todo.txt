@@ -1,12 +1,10 @@
 - Rename Development to Projects DONE
 - Remove the Outreach Tab DONE
+- Add all of the projects into the page DONE
+    - T-Shirt Cannon DONE
+    - Go Baby Go DONE
+    - Frc 2018 Season DONE
 
-- Add all of the projects into the page
-    - T-Shirt Cannon
-    - Go Baby Go
-    - Frc 2018 Season
-- Maybe make it so that the team projects and outreach 
-  are split into two sections
 - About page
     - First Section - Team
         - Team Picture

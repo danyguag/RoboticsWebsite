@@ -69,6 +69,7 @@ function homeInit() {
             textDiv.id = "entry" + entryIndex + "_text";
             textDiv.classList.add("news_entry_text");
             textDiv.classList.add("body_text");
+            textDiv.classList.add("body_text_font");
             textDiv.innerHTML = text;
 
             var imageDiv = document.createElement("div");
