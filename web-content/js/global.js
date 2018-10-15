@@ -403,6 +403,17 @@ var getEntryNumer = function(entryID) {
 	return parseInt(entryID.substring("entry".length));
 }
 
+var getElementBySibling = function(base, type) {
+	var result = base.nextSibling;
+	while (true) {
+        if (result.nodeName == type) {
+            return result;
+        } else {
+            result = result.nextSibling;
+        }
+    }
+}
+
 var setUpProjects =  function(data) {
 	var entryIndex = 0;
 
