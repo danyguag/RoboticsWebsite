@@ -77,8 +77,10 @@ var retrieveAndParseData = function(fileName, callback) {
 	
 			if (currentCheck == (";;;;;")) {
 				var nextAddition = data.substring(startIndex, dataIndex);
-				dataArray.push(nextAddition);
-				startIndex = dataIndex = dataIndex + 5;
+				if (nextAddition != '\n') {
+					dataArray.push(nextAddition);
+					startIndex = dataIndex = dataIndex + 5;
+				}
 				if (data[startIndex] == '\n') {
 					++startIndex;
 				}

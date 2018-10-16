@@ -4,7 +4,8 @@ function projectsInit() {
 
         var rowImageWidth = 0;
         var rowImageHeight = 0;
-        var rowDivTop = 0;
+
+        var firstBrElement = document.getElementById("content_wrapper").children[0];
 
         for (let dataIndex = 0; dataIndex < data.length; dataIndex += 3) {
             var title = data[dataIndex];
@@ -116,7 +117,8 @@ function projectsInit() {
             entryDiv.appendChild(textDiv);
 
             var contentWrapper = document.getElementById("content_wrapper");
-            contentWrapper.appendChild(entryDiv);
+            contentWrapper.insertBefore(entryDiv, firstBrElement);
+            lastElement = entryDiv;
 
             if ((entryIndex % 3) == 0 &&
                 (entryIndex > 0)) {

@@ -15,7 +15,7 @@ function aboutInit() {
         teamBio.style.marginRight = "10%";
         teamBio.style.maxWidth = "35%";
 
-        var teamImageHeight = styleStringtoInt(getComputedStyle(teamImage).getPropertyValue("height")); 
+        var teamImageHeight = styleStringtoInt(window.getComputedStyle(teamImage).getPropertyValue("height")); 
 
         teamBio.style.marginTop = ((teamImageHeight / 2) - (teamImageHeight / 5)) + "px";
 
